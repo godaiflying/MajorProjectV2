@@ -19,7 +19,7 @@ def connect():
 
 
 @socket.on('disconnect')
-def disconn():
+def disconnect():
     print("[CLIENT DISCONNECTED]:", request.sid)
 
     

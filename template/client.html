@@ -17,10 +17,14 @@
     <button type="submit" id="disconnect" disabled>Disconnect</button>
 
 
-
-    <script src="../static/js/jquery-3.6.0.min.js"></script>
-    <script src="../static/js/socket.io.js"></script>
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js" integrity="sha384-7EyYLQZgWBi67fBtVxw60/OWl1kjsfrPFcaU0pp0nAh+i8FD068QogUvg85Ewy1k" crossorigin="anonymous"></script>
+    <script
+        src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous">
+    </script>
     <script>
+        // getting all the variables from html
         let chat = document.getElementById("chat");
         let inp_message = document.getElementById("inp_message");
         let send = document.getElementById("send");
@@ -28,6 +32,81 @@
         let btn_connect = document.getElementById("connect");
         let btn_disconnect = document.getElementById("disconnect")
         var user = username.value();
+
+        // connecting to the socket
+        let socket = io({autoConnect: false});
+
+        btn_connect.onclick() = function() {
+            if(username.value != ""){
+                socket.connect();
+            }
+            else{
+                alert("ENTER USERNAME");
+                console.log("please enter username");
+            }
+        };
+
+        // when the user is connected it makes it possiable to send messages
+        socket.on('connect', function(){
+            inp_message.disabled = false;
+            send.disabled = false;
+            btn_disconnect.disabled = false;
+            username.disabled = true;
+            btn_connect.disabled = true;
+            user = username.value;
+            socket.emit('notify', user + " joined");
+
+            //create a p tag to print a message onto the page
+            ptag = document.createElement('p');
+                ptag.innerHTML = "You joined!";
+                chat.appendChild(ptag);
+
+            console.log("connected to server!");
+        });
+
+        //making sure that all things the right things are disabled when somebody disconnects
+        socket.on('disconnect', function(){
+            ptag = document.createElement('p');
+                ptag.innerHTML = "You left!";
+                chat.appendChild(ptag);
+
+
+            console.log("disconnected from server");
+            inp_message.disabled = true;
+            send.disabled = true;
+            btn_disconnect.disabled = true;
+            username.disabled = false;
+            btn_connect.disabled = false;
+            socket.close();
+
+        });
+
+        btn_disconnect.onclick(function(){
+            socket.emit('notify', user + " left");
+            socket.close();
+        });
+
+
+        //Tell that the user has joined the chat 
+        socket.on('notify', function(status){
+            ptag = document.createElement('p');
+                ptag.innerHTML = status;
+                chat.appendChild(ptag);
+        });
+    
+        //send data
+        send.onclick() = function(){
+            socekt.emit('data', "["+user+"]: " + inp_message.value);
+            inp_message.value = ""
+        };
+
+        socket.on('returndata', function(data){
+            ptag = document.createElement('p');
+                ptag.innerHTML = data;
+                chat.appendChild(ptag);
+        });
+
+
 
 
 
