@@ -100,14 +100,12 @@
             inp_message.value = ""
         };
 
+        //gets messages from the server
         socket.on('returndata', function(data){
             ptag = document.createElement('p');
                 ptag.innerHTML = data;
                 chat.appendChild(ptag);
         });
-
-
-
 
 
 

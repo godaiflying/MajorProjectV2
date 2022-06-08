@@ -2,6 +2,8 @@
 #https://blog.miguelgrinberg.com/post/learn-socket-io-with-python-and-javascript-in-90-minutes
 #https://medium.com/geekculture/making-your-own-chatroom-sockets-in-python-javascript-html-ac14c2870064
 #https://flask-socketio.readthedocs.io/en/latest/getting_started.html#initialization
+#https://devcenter.heroku.com/articles/heroku-cli
+#log into heroku
 
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO, emit
